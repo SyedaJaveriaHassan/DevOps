@@ -1,0 +1,247 @@
+TESTCASE 1:
+import unittest
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
+class TestLoginPage(unittest.TestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Chrome(executable_path='/path/to/chromedriver')
+        self.driver.get('http://localhost/RestroGirls/') 
+
+    def tearDown(self):
+        # Clean up after the test
+        self.driver.quit()
+
+    def test_successful_login(self):
+        # Replace these values with valid login credentials for testing
+        email = 'javeria@gmail.com'
+        password = 'RestoGirl123'
+
+        # Find the email and password input fields and submit button using Selenium
+        email_input = self.driver.find_element_by_name('email')
+        password_input = self.driver.find_element_by_name('password')
+        submit_button = self.driver.find_element_by_name('submit_button') 
+
+        # Input valid credentials
+        email_input.send_keys(email)
+        password_input.send_keys(password)
+
+        # Click the submit button
+        submit_button.click()
+
+        self.assertTrue(self.driver.find_element_by_id('welcome_message').is_displayed())
+
+if __name__ == '__main__':
+    unittest.main()
+=======================================================================================================================================================
+TESTCASE 2:
+import unittest
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
+class TestOrderingFood(unittest.TestCase):
+
+    def setUp(self):
+        
+        self.driver = webdriver.Chrome(executable_path='/path/to/chromedriver')
+        self.driver.get('http://localhost/RestroGirls/')  
+
+    def tearDown(self):
+        # Clean up after the test
+        self.driver.quit()
+
+    def test_order_food_within_restaurant(self):
+        #  you are on the restaurant's page where you can select food items
+
+        # Find and click on the food items you want to order
+        item1_checkbox = self.driver.find_element_by_id('item1_checkbox')
+        item1_checkbox.click()
+
+        item2_checkbox = self.driver.find_element_by_id('item2_checkbox')
+        item2_checkbox.click()
+
+        # Find and click on the "Place Order" button
+        place_order_button = self.driver.find_element_by_id('place_order_button')
+        place_order_button.click()
+
+        # Assume there is a confirmation page after placing the order
+        confirmation_message = self.driver.find_element_by_id('confirmation_message').text
+
+        # Add an assertion to check if the confirmation message is as expected
+        expected_confirmation_message = 'Your order has been placed successfully!'
+        self.assertEqual(confirmation_message, expected_confirmation_message)
+
+        # You can also check if the order details are correct on the confirmation page
+        order_details = self.driver.find_element_by_id('order_details').text
+        expected_order_details = 'Item 1, Item 2'
+        self.assertEqual(order_details, expected_order_details)
+
+if __name__ == '__main__':
+    unittest.main()
+======================================================================================================================================================
+TESTCASE 3:
+import unittest
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
+class TestAdminFunctionality(unittest.TestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Chrome(executable_path='/path/to/chromedriver')
+        self.driver.get('http://localhost/RestroGirls/admin/dashboard.php') 
+
+    def tearDown(self):
+        # Clean up after the test
+        self.driver.quit()
+
+    def test_add_update_delete_food_item(self):
+        # Assume you are on the admin page for managing food items
+
+        # Add a new food item
+        add_item_button = self.driver.find_element_by_id('add_item_button')
+        add_item_button.click()
+
+        # Fill in the details for the new item
+        item_name_input = self.driver.find_element_by_id('item_name')
+        item_name_input.send_keys('New Food Item')
+
+        item_price_input = self.driver.find_element_by_id('item_price')
+        item_price_input.send_keys('10.99')
+
+        save_button = self.driver.find_element_by_id('save_button')
+        save_button.click()
+
+        # Verify that the new item is added successfully
+        added_item = self.driver.find_element_by_xpath('//div[@class="item" and contains(text(), "New Food Item")]')
+        self.assertTrue(added_item.is_displayed())
+
+        # Update the details of the added item
+        edit_button = self.driver.find_element_by_xpath('//div[@class="item" and contains(text(), "New Food Item")]/following-sibling::button[@class="edit_button"]')
+        edit_button.click()
+
+        # Update the item name
+        updated_item_name_input = self.driver.find_element_by_id('item_name')
+        updated_item_name_input.clear()
+        updated_item_name_input.send_keys('Updated Food Item')
+
+        save_button.click()
+
+        # Verify that the item is updated successfully
+        updated_item = self.driver.find_element_by_xpath('//div[@class="item" and contains(text(), "Updated Food Item")]')
+        self.assertTrue(updated_item.is_displayed())
+
+        # Delete the updated item
+        delete_button = self.driver.find_element_by_xpath('//div[@class="item" and contains(text(), "Updated Food Item")]/following-sibling::button[@class="delete_button"]')
+        delete_button.click()
+
+        # Verify that the item is deleted successfully
+        deleted_item = self.driver.find_element_by_xpath('//div[@class="item" and contains(text(), "Updated Food Item")]')
+        self.assertFalse(deleted_item.is_displayed())
+
+    # Similar test methods can be created for managing categories and orders
+
+if __name__ == '__main__':
+    unittest.main()
+=====================================================================================================================================================
+TESTCASE 4:
+import unittest
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
+class TestRatingAndComments(unittest.TestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Chrome(executable_path='/path/to/chromedriver')
+        self.driver.get('http://localhost/RestroGirls/') 
+
+    def tearDown(self):
+        # Clean up after the test
+        self.driver.quit()
+
+    def test_user_provides_review(self):
+        # Assume you are on the page where users can provide reviews for the restaurant
+
+        # Find the review input field and submit button
+        review_input = self.driver.find_element_by_id('review_input')
+        submit_review_button = self.driver.find_element_by_id('submit_review_button')
+
+        # Provide a positive review
+        review_input.send_keys('Great experience! Delicious food and excellent service.')
+        submit_review_button.click()
+
+        # Verify that the restaurant's rating is updated to 5 stars
+        restaurant_rating = self.driver.find_element_by_id('restaurant_rating').text
+        self.assertEqual(restaurant_rating, '5 Stars')
+
+        # Verify that the positive review is displayed in the comments section
+        positive_comment = self.driver.find_element_by_xpath('//div[@class="comment" and contains(text(), "Great experience! Delicious food and excellent service.")]')
+        self.assertTrue(positive_comment.is_displayed())
+
+        # Provide a negative review
+        review_input.clear()
+        review_input.send_keys('Terrible experience! Bad food and poor service.')
+        submit_review_button.click()
+
+        # Verify that the restaurant's rating is updated to 1 star
+        restaurant_rating = self.driver.find_element_by_id('restaurant_rating').text
+        self.assertEqual(restaurant_rating, '1 Star')
+
+        # Verify that the negative review is displayed in the comments section
+        negative_comment = self.driver.find_element_by_xpath('//div[@class="comment" and contains(text(), "Terrible experience! Bad food and poor service.")]')
+        self.assertTrue(negative_comment.is_displayed())
+
+if __name__ == '__main__':
+    unittest.main()
+======================================================================================================================================================
+TESTCASE 5:
+import unittest
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
+class TestSignUp(unittest.TestCase):
+
+    def setUp(self):
+        # Set up the WebDriver (assuming you are using Selenium)
+        self.driver = webdriver.Chrome(executable_path='/path/to/chromedriver')
+        self.driver.get('http://localhost/RestroGirls/') 
+
+    def tearDown(self):
+        # Clean up after the test
+        self.driver.quit()
+
+    def test_user_signs_up(self):
+        # Assume you are on the sign-up page
+
+        # Find the input fields for full name, email, password, and confirm password
+        full_name_input = self.driver.find_element_by_id('full_name')
+        email_input = self.driver.find_element_by_id('email')
+        password_input = self.driver.find_element_by_id('password')
+        confirm_password_input = self.driver.find_element_by_id('confirm_password')
+
+        # Fill in the sign-up form
+        full_name_input.send_keys('Javeria Hassan')
+        email_input.send_keys('javeria123@gmail.com')
+        password_input.send_keys('Password123')
+        confirm_password_input.send_keys('Password123')
+
+        # Find and click on the "Sign Up" button
+        sign_up_button = self.driver.find_element_by_id('sign_up_button')
+        sign_up_button.click()
+
+        # Assume there is a confirmation message after successful sign-up
+        confirmation_message = self.driver.find_element_by_id('confirmation_message').text
+
+        # Add an assertion to check if the confirmation message is as expected
+        expected_confirmation_message = 'Thank you for signing up, John Doe!'
+        self.assertEqual(confirmation_message, expected_confirmation_message)
+
+        # You can also check if the user is redirected to the expected page after sign-up
+        # For example, check if the user is redirected to the home page
+        current_url = self.driver.current_url
+        expected_url = 'http://your-web-app-url/home'
+        self.assertEqual(current_url, expected_url)
+
+if __name__ == '__main__':
+    unittest.main()
+======================================================================================================================================================
